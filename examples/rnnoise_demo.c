@@ -25,6 +25,31 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*
+ * RNNoise Demo Usage Guide
+ * ------------------------
+ * This program demonstrates noise reduction using RNNoise.
+ * 
+ * Usage:
+ *   ./rnnoise_demo <input_file> <output_file>
+ * 
+ * Parameters:
+ *   input_file  : Path to the input audio file (16-bit PCM)
+ *   output_file : Path where the denoised audio will be saved
+ * 
+ * Requirements:
+ *   - Input must be 16-bit PCM audio
+ *   - Frame size is fixed at 480 samples
+ *   - Sample rate should be 48kHz
+ * 
+ * Example:
+ *   ./rnnoise_demo noisy_speech.pcm denoised_speech.pcm
+ * 
+ * Note: If USE_WEIGHTS_FILE is defined, the program will look for
+ *       a weights file named "weights_blob.bin" in the current directory.
+ */
+
+
 #include <stdio.h>
 #include "rnnoise.h"
 
