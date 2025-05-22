@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-RNNOISE_SRC="."
-BUILD_DIR="./build"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+RNNOISE_SRC="$SCRIPT_DIR"
+BUILD_DIR="$SCRIPT_DIR/build"
 FRAMEWORK_NAME="RNNoise"
 FRAMEWORK_VERSION="A"
 
@@ -11,15 +12,18 @@ which autoconf >/dev/null || brew install autoconf
 which automake >/dev/null || brew install automake
 which libtool >/dev/null || brew install libtool
 
-# Download model files if needed
-cd "$RNNOISE_SRC"
-./download_model.sh
-cd ..
-
-# Prepare rnnoise
-cd "$RNNOISE_SRC"
-./autogen.sh
-cd ..
+# Make autogen.sh executable if it exists
+if [ -f "$SCRIPT_DIR/autogen.sh" ]; then
+    chmod +x "$SCRIPT_DIR/autogen.sh"
+    "$SCRIPT_DIR/autogen.sh"
+else
+    echo "autogen.sh not found, trying alternate approach"
+    # If no autogen.sh, try standard autoconf approach
+    if [ ! -f "$SCRIPT_DIR/configure" ]; then
+        cd "$SCRIPT_DIR"
+        autoreconf -i
+    fi
+fi
 
 # Make sure the build directory exists
 mkdir -p "$BUILD_DIR"
@@ -46,12 +50,11 @@ function build_for_arch() {
     fi
     
     # Configure and build
-    cd "$RNNOISE_SRC"
-    ./configure --host=$ARCH-apple-darwin --prefix="$OUT_DIR" --enable-static --disable-shared --disable-examples
-    make clean
+    cd "$SCRIPT_DIR"
+    ./configure --host=$ARCH-apple-darwin --prefix="$OUT_DIR" --enable-static --disable-shared --disable-examples || true
+    make clean || true
     make -j8
     make install
-    cd ..
 }
 
 # Build for iOS device architectures
