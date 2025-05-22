@@ -1,0 +1,14 @@
+# rnnoise installed pkg-config file
+
+prefix=/Users/mac/Documents/GitHub/rnnoise/build/ios-arm64
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: rnnoise
+Description: RNN-based noise suppression
+Version: 0.2-33-gba60095
+Conflicts:
+Libs: -L${libdir} -lrnnoise
+Libs.private: 
+Cflags: -I${includedir}/
